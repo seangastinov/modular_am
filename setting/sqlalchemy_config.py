@@ -1,13 +1,12 @@
-from setting import config
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from setting import config
+from contextlib import contextmanager
 
 settings = config.get_settings()
 
-SQL_ALCHEMY_URL = f"postgresql+psycopg://{settings.pg_user}:{settings.pg_password}@{settings.pg_host}:{settings.pg_port}/{settings.pg_database}"
-
 SQL_ALCHEMY_URL = (
-    f"mssql+aioodbc://{settings.pg_user}:{settings.pg_password}"
+    f"mssql+pyodbc://{settings.pg_user}:{settings.pg_password}"
     f"@{settings.pg_host}:{settings.pg_port}/{settings.pg_database}"
     "?driver=ODBC+Driver+18+for+SQL+Server"
     "&encrypt=yes"
@@ -15,23 +14,18 @@ SQL_ALCHEMY_URL = (
     "&hostNameInCertificate=*.database.windows.net"
 )
 
-ENGINE = create_async_engine(SQL_ALCHEMY_URL, echo=settings.debug, pool_size=20, max_overflow=10)
+ENGINE = create_engine(SQL_ALCHEMY_URL, echo=settings.debug, pool_size=20, max_overflow=10)
 
-AsyncSessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=ENGINE, class_=AsyncSession
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=ENGINE, expire_on_commit=False)
 
-
-from typing import AsyncGenerator
-
-
-async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
-    async_session = AsyncSessionLocal()
+@contextmanager
+def get_db_session():
+    session = SessionLocal()
     try:
-        yield async_session
-        await async_session.commit()
+        yield session
+        session.commit()
     except Exception as e:
-        await async_session.rollback()
+        session.rollback()
         raise e
     finally:
-        await async_session.close()
+        session.close()

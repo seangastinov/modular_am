@@ -22,7 +22,6 @@ class Settings(BaseSettings):
     pg_port: str
     pg_database: str
     
-    cors_origins: list[str] = ["http://localhost:3000"]
     debug: bool = False
     
 @lru_cache()
