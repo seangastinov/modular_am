@@ -1,8 +1,15 @@
 import dash
+import logging
 from dash import dcc, html, Input, Output
 import plotly.express as px
+import datetime
 import pandas as pd
-from services.db_utils import get_regular_market_data_by_security, get_regular_market_all_security_descriptions
+from services.db_utils import get_regular_market_data_by_security, get_regular_market_all_security_descriptions, get_regular_market_data_by_date
+from utils.logging import setup_logging
+from scripts.backfill_increment import main as backfill_increment
+
+setup_logging()
+logger = logging.getLogger(__name__)
 
 app = dash.Dash(__name__)
 server = app.server
@@ -24,6 +31,13 @@ app.layout = html.Div(children=[
     Input('security-dropdown', 'value')
 )
 def update_dropdown(_):
+    today_date = datetime.date.today()
+    do_backfill = get_regular_market_data_by_date(today_date)
+
+    if not do_backfill:
+        logger.info(f"No data found for {today_date}. Run backfill script.")
+        backfill_increment()
+        
     descriptions = get_regular_market_all_security_descriptions()
     return [{'label': desc, 'value': desc} for desc in descriptions]
 
