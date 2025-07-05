@@ -1,0 +1,55 @@
+Set olFldr = olNS.Folders("Operations").Folders("Inbox").Folders("EOD_Blotter")
+
+This is the problematic code, this code assume that 'Operations' folder is on the root level.
+In most cases, a custom folder like "Operations" is not at the root level. It is usually a subfolder within your primary mailbox.
+
+- Your Mailbox
+- Operations  <-- The code is looking for it here, at the same level Your Mailbox
+- Archives
+
+
+Possible Scenario: 
+- Your Mailbox
+  - Inbox
+  - Sent Items
+  - Operations  <-- The folder is actually here
+    - Inbox
+      - EOD_Blotter
+
+To Verify is we can check the list of directory of the root level. 
+
+For Each Folder In olNS.Folders
+    Debug.Print Folder.Name
+Next
+
+
+
+POSSIBLE SOLUTION:
+
+Sub DownloadEmail_BidFX()
+    Dim olMailbox As Outlook.MAPIFolder
+    Dim olApp As Outlook.Application
+    Dim olNS As Outlook.Namespace
+    Dim olFldr, olFldr2, olFldr3 As Outlook.MAPIFolder
+    Dim olItem As Object
+    Dim olMailItem, msg2 As Outlook.MailItem
+    Dim curRow As Integer
+    'Dim ReportDate As Date
+
+    Dim strFilePath, strTmpMsg, fsSaveFolder, mailSender, emailSubj As String
+    emailSubj = "modular_fx_executions FX Report - " & Format(ReportDate_PrevDate, "yyyymmdd")
+    fsSaveFolder = ThisWorkbook.Path & "\"
+
+    'path for creating attachment msg file for stripping
+    strFilePath = ThisWorkbook.Path & "\"
+    strTmpMsg = "KillMe.msg"
+
+    Set olApp = New Outlook.Application
+    Set olNS = olApp.GetNamespace("MAPI")
+    
+    ' Get the main mailbox folder (parent of the Inbox)
+    Set olMailbox = olNS.GetDefaultFolder(olFolderInbox).Parent
+    
+    ' Navigate to the target folder within mailbox
+    Set olFldr = olMailbox.Folders("Operations").Folders("Inbox").Folders("EOD_Blotter")
+    
