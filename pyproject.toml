@@ -1,0 +1,17 @@
+[project]
+name = "modular_am"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.12.5"
+dependencies = [
+    "pandas==2.2.3",
+    "sqlmodel==0.0.24",
+    "alembic==1.15.2",
+    "sqlalchemy==2.0.40",
+    "pydantic-settings==2.10.1",
+    "bs4==0.0.2",
+    "httpx==0.28.1",
+    "pyodbc==5.2.0",
+    "dash==3.1.1",
+]
