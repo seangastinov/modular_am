@@ -25,6 +25,18 @@ def get_regular_market_all_security_descriptions() -> List[str]:
         query = select(RegularMarket.security_desc).distinct()
         result = session.execute(query)
         return result.scalars().all()
+    
+def get_regular_market_data_by_date(date: datetime.date) -> List[RegularMarket]:
+    with get_db_session() as session:
+        query = (
+            select(RegularMarket)
+            .where(RegularMarket.timestamp >= datetime.datetime.combine(date, datetime.time.min))
+            .where(RegularMarket.timestamp < datetime.datetime.combine(date + datetime.timedelta(days=1), datetime.time.min))
+            .order_by(RegularMarket.timestamp)
+        )
+        result = session.execute(query)
+        data = result.scalars().all()
+        return data
 
 
 def insert_regular_market(data: list[dict]):
