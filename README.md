@@ -60,8 +60,7 @@ Before you begin, ensure you have the following installed:
 ## Scripts
 
 -   [`app.py`](app.py): The main Dash web application.
--   [`increment.py`](increment.py): A script to scrape the latest data and update the database.
--   [`scripts/backfill_increment.py`](scripts/backfill_increment.py): A script to perform a one-time backfill of historical data.
+-   [`scripts/backfill_increment.py`](scripts/backfill_increment.py): A script to scrape the latest data and update the database.
 
 ## Scheduled Tasks (Cron Job)
 

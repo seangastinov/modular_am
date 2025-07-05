@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 def main():
     """
-    Main function to perform the incremental update.
+    Main function to perform update.
     Scrapes data and inserts it into the database.
     """
     logger.info("Start scraping...")
