@@ -41,7 +41,7 @@ def update_charts(selected_security):
 
 
     market_data = get_regular_market_data_by_security(selected_security)
-    print(market_data)
+
     if not market_data:
         empty_trades_fig = px.line(title=f"No data available for {selected_security}")
         empty_tta_fig = px.line() 
@@ -60,16 +60,22 @@ def update_charts(selected_security):
     trades_fig = px.line(
         daily_df, x='date', y='trades',
         title=f'Daily Trades for {selected_security}',
-        labels={'trades': 'Trades', 'date': 'Date'}
+        labels={'trades': 'Trades', 'date': 'Date'},
+        markers=True
     )
+    trades_fig.update_traces(marker=dict(size=10))
+
     tta_fig = px.line(
         daily_df, x='date', y='tta',
         title=f'Daily TTA for {selected_security}',
-        labels={'tta': 'TTA', 'date': 'Date'}
+        labels={'tta': 'TTA', 'date': 'Date'},
+        markers=True
     )
+    tta_fig.update_traces(marker=dict(size=10))
 
 
     return trades_fig, tta_fig
+
 
 if __name__ == '__main__':
     app.run(debug=True)
