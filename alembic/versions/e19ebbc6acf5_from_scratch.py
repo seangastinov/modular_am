@@ -24,7 +24,7 @@ def upgrade() -> None:
     op.create_table(
         "regular_market",
         sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("security_desc", sa.Text(), nullable=False),
+        sa.Column("security_desc", sa.String(length=255), nullable=False),
         sa.Column("trades", sa.Integer(), nullable=False),
         sa.Column("tta", sa.Float(), nullable=False),
         sa.Column("open", sa.Float(), nullable=False),
@@ -32,6 +32,7 @@ def upgrade() -> None:
         sa.Column("low", sa.Float(), nullable=False),
         sa.Column("ltp", sa.Float(), nullable=False),
         sa.Column("lty", sa.Float(), nullable=False),
+        sa.Column("timestamp", sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
     )
     # ### end Alembic commands ###
