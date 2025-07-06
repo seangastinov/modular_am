@@ -1,7 +1,6 @@
 from utils.client import HTTPX_SYNC_CLIENT
 import logging
 from bs4 import BeautifulSoup
-# import httpx
 from utils.logging import setup_logging
 
 setup_logging()

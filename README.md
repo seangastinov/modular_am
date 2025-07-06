@@ -64,6 +64,8 @@ Before you begin, ensure you have the following installed:
 
 ## Scheduled Tasks (Cron Job)
 
+An attempt to deploy the scraping task using Azure WebJobs was unsuccessful due to the website's bot detection mechanisms. Potential solutions include using rotating proxies or web unlocker services!!!
+
 To keep the data up-to-date automatically, you can set up a cron job to run the `backfill_increment.py` script periodically.
 
 1.  Open your crontab for editing:
