@@ -40,20 +40,36 @@ def get_regular_market_data_by_date(date: datetime.date) -> List[RegularMarket]:
 
 
 def insert_regular_market(data: list[dict]):
-    timestamp = datetime.datetime.now() + datetime.timedelta(days=1)  # Set timestamp to tomorrow
+    timestamp = datetime.datetime.now()
     
     with get_db_session() as session:
         records_to_insert = []
         updated_count = 0
         for item in data:
-            security_desc = item.get("Security Description", "")
-            trades = int(item.get("Trades", 0))
-            tta = float(item.get("TTA", 0.0))
-            open_price = float(item.get("Open", 0.0))
-            high = float(item.get("High", 0.0))
-            low = float(item.get("Low", 0.0))
-            ltp = float(item.get("LTP", 0.0))
-            lty = float(item.get("LTY", 0.0))
+            try:
+                security_desc = item.get("Security Description")
+                trades = int(item.get("Trades"))
+                tta = float(item.get("TTA"))
+                open_price = float(item.get("Open"))
+                high = float(item.get("High"))
+                low = float(item.get("Low"))
+                ltp = float(item.get("LTP"))
+                lty = float(item.get("LTY"))
+            except (ValueError, TypeError) as e:
+                logger.warning(f"Error parsing data for security '{security_desc}': {e}")
+                continue
+            if (
+                not security_desc or 
+                not trades or 
+                not tta or 
+                not open_price or 
+                not high or 
+                not low or 
+                not ltp or
+                not lty
+            ):
+                logger.warning(f"Missing data for security '{security_desc}'. Skipping record.")
+                continue
 
             # Get the latest record for this security
             latest = (
