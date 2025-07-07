@@ -59,14 +59,14 @@ def insert_regular_market(data: list[dict]):
                 logger.warning(f"Error parsing data for security '{security_desc}': {e}")
                 continue
             if (
-                not security_desc or 
-                not trades or 
-                not tta or 
-                not open_price or 
-                not high or 
-                not low or 
-                not ltp or
-                not lty
+                security_desc is None or 
+                trades is None or  
+                tta is None or  
+                open_price is None or  
+                high is None or  
+                low is None or  
+                ltp is None or 
+                lty
             ):
                 logger.warning(f"Missing data for security '{security_desc}'. Skipping record.")
                 continue
