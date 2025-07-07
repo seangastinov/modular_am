@@ -14,4 +14,5 @@ dependencies = [
     "httpx==0.28.1",
     "pyodbc==5.2.0",
     "dash==3.1.1",
+    "playwright==1.53.0"
 ]

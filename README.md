@@ -8,7 +8,10 @@ Before you begin, ensure you have the following installed:
 - Python 3.12
 - [uv](https://github.com/astral-sh/uv) (a fast Python package installer and resolver)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) (for deployment)
-
+- To use the headless browser must run
+    ```sh
+    playwright install chromium
+    ```
 ## Setup and Installation
 
 1.  **Clone the repository:**
